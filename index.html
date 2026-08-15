@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steady — home care, calmly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@400;450;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#D5D9D0; --paper:#EEF0E9; --card:#FBFBF7;
+    --ink:#1B2620; --ink-soft:#57625B; --ink-faint:#8A938C;
+    --pine:#2E4B3C; --pine-deep:#213829;
+    --brass:#A9762A; --brass-tint:#F2E7CF;
+    --brick:#97392A; --brick-tint:#F0DCD5;
+    --sage:#5F8268; --sage-tint:#DDE8DD;
+    --slate:#4D6D82; --slate-tint:#DCE6EC;
+    --line:#DCDDD3; --line-soft:#E7E8DF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+    display:flex;justify-content:center;align-items:flex-start;min-height:100%;padding:24px 16px;-webkit-font-smoothing:antialiased;}
+  .phone{width:100%;max-width:428px;background:var(--paper);border-radius:34px;
+    box-shadow:0 24px 60px -20px rgba(27,38,32,.45), 0 0 0 1px rgba(27,38,32,.06);
+    overflow:hidden;position:relative;min-height:880px;display:flex;flex-direction:column;}
+
+  header{background:var(--pine);color:#EDF1E9;padding:20px 22px 18px;position:relative;}
+  .brandrow{display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .glyph{width:30px;height:30px;border-radius:9px;background:linear-gradient(150deg,#4d7059,#2b4636);
+    display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);}
+  .brand .glyph svg{width:17px;height:17px;}
+  .brand h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:19px;letter-spacing:-.02em;color:#F3F6EF;}
+  .brand .tag{font-size:10px;color:#A9C0AC;letter-spacing:.04em;text-transform:uppercase;margin-top:1px;}
+  .people{display:flex;align-items:center;}
+  .ava{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;
+    font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#22362a;border:2px solid var(--pine);}
+  .ava.e{background:#CBE0C9;} .ava.i{background:#E7D3AC;margin-left:-9px;}
+  .sharewith{font-size:10px;color:#A9C0AC;margin-top:9px;letter-spacing:.02em;text-align:right;}
+
+  .season{margin-top:16px;}
+  .season .band{height:34px;border-radius:9px;overflow:hidden;display:flex;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+  .season .seg{flex:1;display:grid;place-items:center;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:500;}
+  .season .seg.win{background:#2b3f4a;} .season .seg.spr{background:#37543f;} .season .seg.sum{background:#5c6a2f;} .season .seg.fal{background:#6d4a25;}
+  .season .now{position:absolute;top:-3px;bottom:-3px;width:2px;background:#F6F4EC;left:61%;box-shadow:0 0 0 3px rgba(246,244,236,.18);}
+  .season .now::after{content:"";position:absolute;top:-5px;left:-4px;width:10px;height:10px;border-radius:50%;background:#F6F4EC;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+  .season .caption{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#A9C0AC;}
+  .season .caption b{color:#EAF0E6;font-weight:500;}
+
+  .scroll{flex:1;overflow-y:auto;padding:0 0 92px;}
+  .view{display:none;padding:20px 18px 8px;}
+  .view.active{display:block;animation:fade .32s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .lede{padding:22px 18px 4px;}
+  .lede .status{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+  .lede .dot{width:8px;height:8px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 4px var(--brass-tint);}
+  .lede .status span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);font-weight:600;}
+  .lede h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:500;font-size:24px;line-height:1.2;letter-spacing:-.02em;color:var(--ink);}
+  .lede h2 em{font-style:normal;color:var(--pine);}
+  .healthchip{display:inline-flex;align-items:center;gap:9px;margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 13px;}
+  .healthchip .num{font-family:'Space Mono',monospace;font-weight:700;font-size:20px;color:var(--pine);}
+  .healthchip .lab{font-size:11px;color:var(--ink-soft);line-height:1.3;}
+  .healthchip .lab b{color:var(--ink);font-weight:600;}
+
+  .sectlabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:24px 2px 12px;display:flex;align-items:center;gap:8px;}
+  .sectlabel .rule{flex:1;height:1px;background:var(--line);}
+  .sectlabel .ct{font-family:'Space Mono',monospace;color:var(--ink-soft);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;margin-bottom:11px;position:relative;transition:opacity .3s, transform .3s;}
+  .card .top{display:flex;align-items:flex-start;gap:11px;}
+  .sev{width:9px;height:9px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+  .sev.critical{background:var(--brick);box-shadow:0 0 0 4px var(--brick-tint);}
+  .sev.attention{background:var(--brass);box-shadow:0 0 0 4px var(--brass-tint);}
+  .sev.good{background:var(--sage);box-shadow:0 0 0 4px var(--sage-tint);}
+  .sev.watch{background:var(--slate);box-shadow:0 0 0 4px var(--slate-tint);}
+  .card h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.01em;line-height:1.25;padding-right:32px;}
+  .card .why{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-top:5px;}
+  .source{font-size:10.5px;color:var(--ink-faint);margin-top:8px;display:flex;align-items:center;gap:5px;}
+  .source svg{width:11px;height:11px;}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;}
+  .pill{font-size:11px;padding:4px 9px;border-radius:20px;font-weight:500;display:inline-flex;align-items:center;gap:4px;}
+  .pill.due{background:#EDEFE8;color:var(--ink-soft);}
+  .pill.diy{background:var(--sage-tint);color:#3c5a45;}
+  .pill.hire{background:var(--brass-tint);color:#7a5518;}
+  .pill.cost{background:#EDEFE8;color:var(--ink-soft);font-family:'Space Mono',monospace;font-size:10px;}
+  .pill.cat{background:#E9E7E0;color:var(--ink-soft);}
+  .pill.who{background:#fff;border:1px solid var(--line);color:var(--ink-soft);}
+  .actions{display:flex;gap:8px;margin-top:13px;padding-top:13px;border-top:1px solid var(--line-soft);}
+  .btn{flex:1;border:none;border-radius:10px;padding:10px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:transform .1s, background .2s;}
+  .btn:active{transform:scale(.97);}
+  .btn.cal{background:var(--pine);color:#EDF1E9;}
+  .btn.cal.done{background:var(--sage-tint);color:#3c5a45;}
+  .btn.snooze{background:transparent;color:var(--ink-soft);border:1px solid var(--line);flex:0 0 auto;padding:10px 14px;}
+  .btn svg{width:14px;height:14px;}
+  .card.snoozed,.card.resolved{opacity:.4;}
+  .lock{position:absolute;top:14px;right:14px;color:var(--brass);}
+  .lock svg{width:14px;height:14px;}
+
+  .watching{background:transparent;border:1px dashed var(--line);border-radius:14px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;margin-bottom:9px;}
+  .watching .eye{color:var(--slate);margin-top:1px;flex-shrink:0;}
+  .watching .eye svg{width:16px;height:16px;}
+  .watching p{font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
+  .watching p b{color:var(--ink);font-weight:600;}
+  .watching .wsrc{color:var(--ink-faint);font-size:10.5px;}
+
+  .ontrack{background:var(--sage-tint);border-radius:14px;padding:14px 16px;margin-top:6px;display:flex;align-items:center;gap:12px;}
+  .ontrack .big{font-family:'Space Mono',monospace;font-weight:700;font-size:24px;color:#3c5a45;}
+  .ontrack p{font-size:12.5px;color:#3c5a45;line-height:1.4;}
+
+  .filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
+  .fchip{font-size:11.5px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer;font-weight:500;}
+  .fchip.on{background:var(--pine);color:#EDF1E9;border-color:var(--pine);}
+  .catgroup{margin-bottom:20px;}
+  .catlabel{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;color:var(--ink);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+  .catlabel .n{font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-faint);font-weight:400;}
+  .allitem{display:flex;gap:11px;padding:12px 13px;background:var(--card);border:1px solid var(--line);border-radius:13px;margin-bottom:8px;transition:opacity .3s;}
+  .allitem.resolved{opacity:.38;}
+  .allitem .sev{margin-top:5px;}
+  .allitem h4{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;line-height:1.3;}
+  .allitem .why{font-size:12px;color:var(--ink-soft);line-height:1.45;margin-top:3px;}
+  .allitem .rowmeta{font-size:10.5px;color:var(--ink-faint);margin-top:7px;display:flex;flex-wrap:wrap;gap:5px 10px;}
+  .allitem .rowmeta b{color:var(--ink-soft);font-weight:600;}
+  .resolvebtn{background:none;border:none;color:var(--ink-faint);cursor:pointer;font-size:11px;font-weight:600;padding:6px 0 0;display:inline-flex;align-items:center;gap:4px;}
+  .resolvebtn svg{width:12px;height:12px;}
+  .resolvebtn:hover{color:var(--sage);}
+
+  .proj{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;margin-bottom:11px;display:flex;gap:13px;}
+  .proj .idx{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:var(--ink-faint);width:22px;flex-shrink:0;padding-top:1px;}
+  .proj h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.01em;}
+  .proj .why{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-top:5px;}
+  .proj .rolls{margin-top:9px;font-size:11.5px;color:var(--slate);line-height:1.5;background:var(--slate-tint);border-radius:9px;padding:8px 10px;}
+  .proj .rolls b{color:#2f4a5a;}
+  .stat{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:6px;display:inline-block;margin-top:11px;}
+  .stat.now{background:var(--brass-tint);color:#7a5518;}
+  .stat.next{background:#E4E2F0;color:#4b4370;}
+  .stat.prog{background:var(--sage-tint);color:#3c5a45;}
+  .stat.any{background:#EDEFE8;color:var(--ink-soft);}
+
+  .marquee{background:linear-gradient(160deg,#33513f,#243c2d);color:#EDF1E9;border-radius:18px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+  .marquee .kick{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#A9C0AC;font-weight:600;}
+  .marquee h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.02em;margin:7px 0 8px;line-height:1.15;}
+  .marquee p{font-size:13px;line-height:1.55;color:#D4E0D2;}
+  .figs{display:flex;gap:10px;margin:16px 0 4px;}
+  .fig{flex:1;background:rgba(255,255,255,.08);border-radius:11px;padding:11px 12px;}
+  .fig .k{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#9DB6A0;}
+  .fig .v{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:#F3F6EF;margin-top:4px;}
+  .fresh{font-size:11px;color:#9DB6A0;margin-top:14px;display:flex;align-items:center;gap:6px;font-style:italic;line-height:1.4;}
+  .fresh svg{width:12px;height:12px;flex-shrink:0;}
+  .incbtn{margin-top:14px;width:100%;background:#EDF1E9;color:var(--pine-deep);border:none;border-radius:10px;padding:11px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;}
+  .inc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;margin-bottom:11px;}
+  .inc h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:16px;}
+  .inc p{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-top:5px;}
+  .inc .fit{font-size:11.5px;color:var(--slate);background:var(--slate-tint);border-radius:8px;padding:7px 10px;margin-top:10px;line-height:1.45;}
+  .inc .fit b{color:#2f4a5a;}
+  .inc .row{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+
+  .drop{border:2px dashed var(--line);border-radius:16px;padding:30px 20px;text-align:center;background:var(--card);cursor:pointer;transition:border-color .2s,background .2s;}
+  .drop:hover{border-color:var(--sage);background:var(--sage-tint);}
+  .drop .cam{color:var(--ink-faint);} .drop .cam svg{width:30px;height:30px;}
+  .drop p{font-size:13px;color:var(--ink-soft);margin-top:9px;} .drop p b{color:var(--ink);}
+  textarea{width:100%;margin-top:13px;border:1px solid var(--line);border-radius:13px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);resize:none;background:var(--card);line-height:1.5;}
+  textarea:focus{outline:none;border-color:var(--sage);}
+  .sendbtn{width:100%;margin-top:11px;background:var(--pine);color:#EDF1E9;border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s;}
+  .sendbtn:active{transform:scale(.98);} .sendbtn svg{width:16px;height:16px;}
+  .flaghint{font-size:12px;color:var(--ink-faint);line-height:1.5;margin-top:14px;text-align:center;}
+
+  .viewhead{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:22px;letter-spacing:-.02em;margin-bottom:4px;}
+  .viewsub{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-bottom:20px;}
+
+  nav{position:absolute;bottom:0;left:0;right:0;background:rgba(251,251,247,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding:9px 4px 16px;}
+  nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:var(--ink-faint);font-family:'Inter',sans-serif;font-size:10px;font-weight:500;transition:color .2s;}
+  nav button svg{width:20px;height:20px;} nav button.on{color:var(--pine);}
+
+  .toast{position:absolute;bottom:88px;left:16px;right:16px;background:var(--pine-deep);color:#EDF1E9;border-radius:13px;padding:13px 16px;font-size:13px;line-height:1.4;box-shadow:0 12px 30px -8px rgba(0,0,0,.4);transform:translateY(30px);opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.2,.9,.3,1);display:flex;align-items:center;gap:10px;z-index:20;}
+  .toast.show{transform:none;opacity:1;} .toast svg{width:17px;height:17px;flex-shrink:0;}
+
+  .modal{position:absolute;inset:0;background:rgba(20,28,23,.5);backdrop-filter:blur(3px);display:none;align-items:flex-end;z-index:30;}
+  .modal.show{display:flex;animation:fade .25s ease;}
+  .sheet{background:var(--paper);border-radius:22px 22px 0 0;padding:24px 22px 28px;width:100%;animation:slideup .32s cubic-bezier(.2,.9,.3,1);}
+  @keyframes slideup{from{transform:translateY(100%);}to{transform:none;}}
+  .sheet .ic{width:42px;height:42px;border-radius:12px;background:var(--brass-tint);display:grid;place-items:center;color:var(--brass);margin-bottom:14px;}
+  .sheet .ic svg{width:22px;height:22px;}
+  .sheet h4{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:19px;letter-spacing:-.01em;margin-bottom:8px;}
+  .sheet p{font-size:14px;color:var(--ink-soft);line-height:1.55;} .sheet p b{color:var(--ink);font-weight:600;}
+  .sheet .sheetbtns{display:flex;gap:9px;margin-top:20px;}
+  .sheet .sheetbtns button{flex:1;border-radius:11px;padding:13px;font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;cursor:pointer;border:none;}
+  .sheet .hold{background:var(--pine);color:#EDF1E9;}
+  .sheet .keep{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
+
+  /* Done button on task cards */
+  .donebtn{position:absolute;top:13px;right:13px;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);cursor:pointer;display:grid;place-items:center;color:var(--ink-faint);transition:all .15s;padding:0;}
+  .donebtn:hover{border-color:var(--sage);color:var(--sage);background:var(--sage-tint);}
+  .donebtn svg{width:14px;height:14px;}
+  .pill.locked{background:var(--brass-tint);color:#7a5518;}
+  .card.held{opacity:.72;}
+  .pill.held{background:var(--slate-tint);color:#2f4a5a;}
+  .btn.unhold{background:transparent;color:var(--slate);border:1px solid var(--slate-tint);flex:0 0 auto;padding:10px 14px;}
+
+  /* Seasonal checks */
+  .checkrow{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:9px;}
+  .checkrow .ct{display:flex;align-items:flex-start;gap:10px;}
+  .checkrow .ceye{color:var(--slate);margin-top:2px;flex-shrink:0;} .checkrow .ceye svg{width:15px;height:15px;}
+  .checkrow h4{font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;line-height:1.3;}
+  .checkrow .why{font-size:12px;color:var(--ink-soft);line-height:1.45;margin-top:3px;}
+  .checkrow .cint{font-size:10.5px;color:var(--ink-faint);margin-top:6px;font-family:'Space Mono',monospace;}
+  .cbtns{display:flex;gap:8px;margin-top:11px;}
+  .cbtn{flex:1;border-radius:9px;padding:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:5px;}
+  .cbtn.clear{background:var(--sage-tint);color:#3c5a45;} .cbtn.clear svg{width:13px;height:13px;}
+  .cbtn.issue{background:transparent;color:var(--brass);border:1px solid var(--brass-tint);}
+  .upcoming{font-size:11.5px;color:var(--ink-faint);line-height:1.5;margin-top:4px;padding:0 2px;display:flex;align-items:center;gap:7px;}
+  .upcoming svg{width:14px;height:14px;flex-shrink:0;color:var(--slate);}
+
+  .histlink{background:none;border:none;color:var(--pine);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;margin-top:14px;padding:2px;display:flex;align-items:center;gap:6px;}
+  .histlink svg{width:14px;height:14px;}
+
+  /* Header history button */
+  .histbtn{width:32px;height:32px;border-radius:9px;border:none;background:rgba(255,255,255,.1);color:#CFE0CE;cursor:pointer;display:grid;place-items:center;margin-right:10px;transition:background .2s;}
+  .histbtn:hover{background:rgba(255,255,255,.18);} .histbtn svg{width:17px;height:17px;}
+  .rightcluster{display:flex;align-items:center;}
+
+  /* History overlay */
+  .overlay{position:absolute;inset:0;background:var(--paper);z-index:40;transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.9,.3,1);display:flex;flex-direction:column;}
+  .overlay.show{transform:none;}
+  .ovhead{background:var(--pine);color:#EDF1E9;padding:20px 20px 18px;display:flex;align-items:center;gap:12px;}
+  .ovhead button{background:rgba(255,255,255,.1);border:none;color:#EDF1E9;width:32px;height:32px;border-radius:9px;cursor:pointer;display:grid;place-items:center;}
+  .ovhead button svg{width:17px;height:17px;}
+  .ovhead h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:19px;letter-spacing:-.02em;}
+  .ovhead .sub{font-size:11px;color:#A9C0AC;margin-top:1px;}
+  .ovscroll{flex:1;overflow-y:auto;padding:18px;}
+  .oventry{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-soft);}
+  .oventry .oic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;}
+  .oventry .oic.done{background:var(--sage-tint);color:#3c5a45;}
+  .oventry .oic.checked{background:var(--slate-tint);color:#2f4a5a;}
+  .oventry .oic.resolved{background:var(--sage-tint);color:#3c5a45;}
+  .oventry .oic.issue{background:var(--brass-tint);color:#7a5518;}
+  .oventry .oic svg{width:15px;height:15px;}
+  .oventry h4{font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;line-height:1.35;}
+  .oventry .osub{font-size:11px;color:var(--ink-faint);margin-top:3px;}
+  .oventry .osub b{color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <header>
+    <div class="brandrow">
+      <div class="brand">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#EDF1E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/></svg></div>
+        <div><h1>Steady</h1><div class="tag">working name</div></div>
+      </div>
+      <div>
+        <div class="rightcluster">
+          <button class="histbtn" title="History" onclick="openHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg></button>
+          <div class="people"><div class="ava e">E</div><div class="ava i">I</div></div>
+        </div>
+        <div class="sharewith">You + Isa</div>
+      </div>
+    </div>
+    <div class="season">
+      <div class="band">
+        <div class="seg win">Winter</div><div class="seg spr">Spring</div><div class="seg sum">Summer</div><div class="seg fal">Fall</div>
+        <div class="now"></div>
+      </div>
+      <div class="caption"><span>97 rue du Colonial</span><b>Late summer. Fall prep is opening.</b></div>
+    </div>
+  </header>
+
+  <div class="scroll">
+
+    <div class="lede" id="lede">
+      <div class="status"><div class="dot"></div><span>3 to handle soon</span></div>
+      <h2>A few real ones worth sorting, <em>then most of it can wait.</em></h2>
+      <div class="healthchip">
+        <div class="num">74</div>
+        <div class="lab"><b>Home health: steady, with a to-do list.</b><br>Seeded from your March 2024 inspection. 3 safety items lead.</div>
+      </div>
+    </div>
+
+    <div class="view active" id="view-brief" style="padding-top:0;">
+      <div class="sectlabel">Needs you this season <span class="rule"></span><span class="ct" id="briefct"></span></div>
+      <div id="brieflist"></div>
+
+      <div class="sectlabel">This season's checks <span class="rule"></span><span class="ct" id="checkct"></span></div>
+      <div id="checklist"></div>
+      <div class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Coming this winter: ice-dam and attic-frost checks after the first real snow.</div>
+
+      <div class="sectlabel">Watching <span class="rule"></span></div>
+      <div id="watchlist"></div>
+      <div class="sectlabel">On track <span class="rule"></span></div>
+      <div class="ontrack">
+        <div class="big" id="ontrackct">7</div>
+        <p>Recurring items are scheduled and the rest of the house checked out clean. Nothing here needs a decision right now.</p>
+      </div>
+      <button class="histlink" onclick="openHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>View what you and Isa have completed</button>
+    </div>
+
+    <div class="view" id="view-all">
+      <div class="viewhead">Everything, by system</div>
+      <div class="viewsub">Every item pulled from your inspection, plus the recurring care. Mark anything you've already handled and it drops off.</div>
+      <div class="filters" id="filters">
+        <div class="fchip on" data-f="all" onclick="setFilter('all',this)">All</div>
+        <div class="fchip" data-f="critical" onclick="setFilter('critical',this)">Safety</div>
+        <div class="fchip" data-f="attention" onclick="setFilter('attention',this)">Should do</div>
+        <div class="fchip" data-f="good" onclick="setFilter('good',this)">Good to do</div>
+        <div class="fchip" data-f="watch" onclick="setFilter('watch',this)">Watching</div>
+      </div>
+      <div id="alllist"></div>
+    </div>
+
+    <div class="view" id="view-projects">
+      <div class="viewhead">Projects</div>
+      <div class="viewsub">Your one-time list, in the order that saves you work. Some projects quietly close out inspection items too.</div>
+
+      <div class="proj"><div class="idx">01</div><div>
+        <h3>Deck rebuild</h3>
+        <div class="why">Hot tub out, old deck cleared, then rebuild. The backyard sequence waits on this.</div>
+        <div class="rolls"><b>Closes 4 inspection items:</b> unsecured deck posts, loose deck railing, lack of support under the deck, and the missing balcony flashing. Rebuilding fixes all of them at once.</div>
+        <span class="stat prog">In progress</span>
+      </div></div>
+
+      <div class="proj"><div class="idx">02</div><div>
+        <h3>Renovate the lawn</h3>
+        <div class="why">Aerate, topdress the bumpy low spots, overseed, hit the weeds. Jumps ahead of the pavers because the Gatineau fall seeding window is open now and closes by mid September.</div>
+        <span class="stat now">Do now</span>
+      </div></div>
+
+      <div class="proj"><div class="idx">03</div><div>
+        <h3>Regrade the sides and top up the riverstone</h3>
+        <div class="why">Two of your side beds pool water toward the foundation. Reshape the slope away from the house, then refill the river rock so it sits right. Do them together and you grade once.</div>
+        <div class="rolls"><b>Closes 1 inspection item:</b> inadequate slope, water accumulation risk on the right and rear sides.</div>
+        <span class="stat next">Up next</span>
+      </div></div>
+
+      <div class="proj"><div class="idx">04</div><div>
+        <h3>Relevel the back pavers</h3>
+        <div class="why">Lift the settled pavers, re-sand the base, reset them true. Before cleaning, so you're not degreasing pavers you're about to pull.</div>
+        <span class="stat next">After 03</span>
+      </div></div>
+
+      <div class="proj"><div class="idx">05</div><div>
+        <h3>Degrease driveway and paver oil stains</h3>
+        <div class="why">Lift the oil spots before winter salt drives them in. Comes after the paver reset, on a dry stretch before the fall rains.</div>
+        <span class="stat next">After 04</span>
+      </div></div>
+
+      <div class="proj"><div class="idx">06</div><div>
+        <h3>Top up the attic insulation</h3>
+        <div class="why">Inspection measured about 12 inches, roughly R-37. Blowing it up to 15+ inches for R-50 is a clean DIY weekend, cuts the heating bill, and helps stop the ice dams the report flagged. Rebate potential too, see the Value tab.</div>
+        <div class="rolls"><b>Closes 2 inspection items:</b> under-target attic insulation and the leaky attic access hatch.</div>
+        <span class="stat any">Before winter</span>
+      </div></div>
+    </div>
+
+    <div class="view" id="view-incentives">
+      <div class="viewhead">Worth the money</div>
+      <div class="viewsub">Upgrades that add value or comfort, matched to what your house actually needs, with current Gatineau and Quebec programs found for you.</div>
+
+      <div class="marquee">
+        <div class="kick">Marquee opportunity</div>
+        <h3>Cold-climate heat pump</h3>
+        <p>You've said you want a hybrid cold-climate heat pump. Pairing one with the rented Gazifère furnace is exactly the hybrid setup: the heat pump does most of the year, the furnace covers the deep cold. Cuts heating costs, adds resale appeal, and there are active Quebec and federal programs to offset it.</p>
+        <div class="figs">
+          <div class="fig"><div class="k">Est. install</div><div class="v">$–,–––</div></div>
+          <div class="fig"><div class="k">Rebates found</div><div class="v">$–,–––</div></div>
+          <div class="fig"><div class="k">Payback</div><div class="v">– yrs</div></div>
+        </div>
+        <div class="fresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Prototype figures. The weekly search fills these live from LogisVert, Chauffez vert and the federal programs.</div>
+        <button class="incbtn" onclick="toast('Added to Projects. I\'ll pull live rebate figures on the next weekly run.')">Add to projects</button>
+      </div>
+
+      <div class="inc">
+        <h3>Attic insulation top-up to R-50</h3>
+        <p>Your best value move, and the inspection already made the case. At ~12 inches you're below target, which is why the report shows the ice-dam risk. Topping up is cheap, DIY-friendly, and often Rénoclimat or LogisVert eligible.</p>
+        <div class="fit"><b>Why it fits:</b> straight off your inspection. Pays back in comfort and lower bills faster than almost anything else here.</div>
+        <div class="row"><span class="pill cost">High ROI</span><span class="pill diy">DIY-friendly</span><span class="pill cat">Rebate likely</span></div>
+      </div>
+
+      <div class="inc">
+        <h3>Replace the failed window sealed units</h3>
+        <p>A few windows show condensation between the panes, which means the seal has failed and the insulating gas is gone. Swapping the sealed units (not whole windows) restores the R-value and can qualify under a Rénoclimat package.</p>
+        <div class="fit"><b>Why it fits:</b> flagged in your inspection as broken thermos seals. Comfort plus a quieter, less drafty house.</div>
+        <div class="row"><span class="pill cost">Comfort + resale</span><span class="pill hire">Get quotes</span></div>
+      </div>
+
+      <div class="inc">
+        <h3>Air sealing: attic hatch and exterior caulk</h3>
+        <p>The cheapest comfort win on the list. Seal the leaky attic hatch and redo the missing exterior caulking and mortar, and you cut drafts and stop small water paths before they start. Often bundled into Rénoclimat.</p>
+        <div class="fit"><b>Why it fits:</b> pulls three small inspection items into one afternoon with real payback.</div>
+        <div class="row"><span class="pill cost">Low cost</span><span class="pill diy">DIY</span></div>
+      </div>
+
+      <div class="inc">
+        <h3>Smart thermostat credit</h3>
+        <p>You already run a Resideo unit. Some Hydro-Québec and utility programs offer credits for eligible connected thermostats. Small, but close to free if it qualifies.</p>
+        <div class="row"><span class="pill cost">Low effort</span><span class="pill diy">Already installed</span></div>
+      </div>
+    </div>
+
+    <div class="view" id="view-flag">
+      <div class="viewhead">Flag an issue</div>
+      <div class="viewsub">Snap it, say one line, and I'll triage it into a task with a severity, a fix, and a place in the list.</div>
+      <div class="drop" onclick="toast('Camera and photo picker connect in the real build.')">
+        <div class="cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <p><b>Add a photo</b><br>Tap to snap or choose one</p>
+      </div>
+      <textarea id="flagtext" rows="3" placeholder="e.g. Brown water stain spreading on the basement ceiling under the upstairs bathroom"></textarea>
+      <button class="sendbtn" onclick="submitFlag()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>Send to triage
+      </button>
+      <p class="flaghint">Goes to AI first to sort severity and next steps. Anything it can't call confidently, it hands to a full Claude thread so you and Isa can dig in.</p>
+    </div>
+
+  </div>
+
+  <nav>
+    <button class="on" data-view="brief" onclick="go('brief',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/></svg>Brief</button>
+    <button data-view="all" onclick="go('all',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>All</button>
+    <button data-view="projects" onclick="go('projects',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 8H9v13h6z"/></svg>Projects</button>
+    <button data-view="incentives" onclick="go('incentives',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Value</button>
+    <button data-view="flag" onclick="go('flag',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button>
+  </nav>
+
+  <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toasttext"></span></div>
+
+  <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="sheet">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h4 id="modaltitle"></h4>
+      <p id="modalbody"></p>
+      <div class="sheetbtns">
+        <button class="keep" onclick="closeModal()">Leave it up</button>
+        <button class="hold" id="holdbtn" onclick="holdTask()"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="ovhead">
+      <button onclick="closeHistory()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div><h2>History</h2><div class="sub">Everything you and Isa have handled</div></div>
+    </div>
+    <div class="ovscroll" id="histlist"></div>
+  </div>
+
+</div>
+
+<script>
+  const INSPECT = {label:'Inspection · Mar 2024'};
+  const tasks = [
+    { id:'garage-co', sev:'critical', cat:'Safety', title:'Finish the garage wall / CO barrier', brief:true, hardcap:true,
+      why:"The plaster finish is missing on the garage walls, and there's a room above the garage. The report flags this as a carbon monoxide infiltration path. Complete the airtight wall to close it.",
+      timing:'Handle soon', who:'You', diy:'Hire', cost:'Get quotes', source:INSPECT,
+      holdText:"This is a carbon monoxide path with living space above the garage. I'll keep it at the top of the list, not snooze it away.", holdDate:'stay' },
+    { id:'pvc-vent', sev:'critical', cat:'Safety', title:'Replace the non-compliant PVC combustion vent', brief:true, hardcap:true,
+      why:"Flagged at inspection as a material that's no longer to code. Gazifère didn't raise it on the maintenance visit, so it's still a live item: bring it up specifically next time, or get a heating contractor to price the swap.",
+      timing:'Before heating season', who:'Isa', diy:'Hire', cost:'Covered (rented)', source:INSPECT,
+      holdText:"Combustion venting on a unit you run daily all winter. I can hold it to Nov 1, but not past the start of heating season.", holdDate:'Nov 1' },
+    { id:'ac-lock', sev:'critical', cat:'Safety', title:'Lock the AC disconnect box', brief:true, hardcap:false,
+      why:"The shut-off breaker box behind the outdoor condenser (your MARS 2 disconnect) should be padlocked. A cheap fix, real safety gain around a live 240V box.",
+      timing:'This week', who:'You', diy:'DIY', cost:'~$8', source:INSPECT },
+
+    { id:'lawn', sev:'attention', cat:'Grounds', title:'Lawn renovation window is open', brief:true, hardcap:false,
+      why:"The Gatineau fall overseeding window runs now through mid September. Aerate, topdress the bumpy spots, overseed while the soil is warm and nights cool. Miss it and you wait for spring.",
+      timing:'Best by Sep 15', who:'You', diy:'DIY', cost:'$120–260', source:null, tag:'Project' },
+    { id:'taps', sev:'attention', cat:'Exterior & Water', title:'Winterize the outdoor taps', brief:true, hardcap:true,
+      why:"Shut off and drain the exterior hose bibs and pull the hoses before the first hard frost, or you risk a split line inside the wall.",
+      timing:'Hold until first frost', who:'You', diy:'DIY', cost:'Free', source:null,
+      holdText:"Tied to the first hard frost, usually mid October in Aylmer. I'll hold it to Oct 15 but not past. A burst bib line is a wet basement, not a chore.", holdDate:'Oct 15' },
+    { id:'gutter-repairs', sev:'attention', cat:'Roof & Gutters', title:'Fix the gutter overflow and flashing', brief:true, hardcap:false,
+      why:"The report found the front gutter spilling onto the brick, a missing kickout flashing, and loose fasteners. Left alone, water runs down the wall. Resecure, add the kickout, stop the overflow.",
+      timing:'Fall, dry day', who:'You', diy:'DIY', cost:'$40–120', source:INSPECT },
+    { id:'attic-insul', sev:'attention', cat:'Insulation & Ventilation', title:'Top up attic insulation + seal the hatch', brief:true, hardcap:false,
+      why:"Measured at ~12 inches, below the R-50 target, which is why the report shows ice-dam risk. Blow it up to 15+ inches and air-seal the leaky attic hatch. Warmer house, lower bill, rebate potential.",
+      timing:'Before winter', who:'You', diy:'DIY', cost:'$300–600', source:INSPECT, tag:'Project' },
+    { id:'ext-caulk', sev:'attention', cat:'Exterior & Water', title:'Redo exterior caulk and mortar', brief:false, hardcap:false,
+      why:"Missing exterior sealant around some components, plus a mortar crack on the front facade. Both are small water and insect paths. Re-caulk and repoint before the freeze.",
+      timing:'Fall, before freeze', who:'You', diy:'DIY', cost:'$30–60', source:INSPECT },
+    { id:'balcony-flash', sev:'attention', cat:'Exterior & Water', title:'Add the missing balcony flashing', brief:false, hardcap:false,
+      why:"No flashing at the junction of the deck covering and the edge joist, a future rot path. Your deck rebuild handles this, so it's tracked under that project.",
+      timing:'With deck rebuild', who:'You', diy:'DIY', cost:'In deck scope', source:INSPECT },
+    { id:'plumb-seals', sev:'attention', cat:'Plumbing', title:'Redo the bathroom fixture seals', brief:false, hardcap:false,
+      why:"Seals around fixtures in the upstairs and basement bathrooms are letting water past. Strip and recaulk to keep water off the adjacent finishes.",
+      timing:'Any weekend', who:'You', diy:'DIY', cost:'~$25', source:INSPECT },
+    { id:'wh-valve', sev:'attention', cat:'Plumbing', title:'Install water heater mixing valve', brief:false, hardcap:false,
+      why:"The tempering (mixing) valve is missing on the water heater. It protects against scalds and is code for point-of-use. Your Giant tank is a 2019, so it's mid-life, worth doing now.",
+      timing:'Next plumber visit', who:'You', diy:'Hire', cost:'Get quotes', source:INSPECT },
+    { id:'firewall', sev:'attention', cat:'Safety', title:'Upgrade the firewall insulation', brief:false, hardcap:false,
+      why:"The report advises swapping the insulation above the party firewall for fire-rated batts like Roxul Safe'n'Sound. Reasonable DIY in the attic if access allows.",
+      timing:'No rush', who:'You', diy:'DIY', cost:'$40–80', source:INSPECT },
+
+    { id:'detectors', sev:'good', cat:'Safety', title:'Test smoke and CO detectors', brief:true, hardcap:true,
+      why:"Full test on every unit and fresh batteries before the furnace runs daily. Five minutes, cheapest peace of mind in the house.",
+      timing:'Monthly', who:'You', diy:'DIY', cost:'~$20', source:INSPECT,
+      holdText:"Safety item, so I hold it gently but keep it visible. Do it this month before heating season.", holdDate:'end of the month' },
+    { id:'gutters-clean', sev:'good', cat:'Roof & Gutters', title:'Clear the gutters after leaf drop', brief:true, hardcap:false,
+      why:"Clear them once the leaves are down and before the first freeze, so meltwater drains instead of icing under the roof edge. There's a tree close to one run, so watch that one.",
+      timing:'Late October', who:'You', diy:'DIY', cost:'Free', source:INSPECT },
+    { id:'downspouts', sev:'good', cat:'Roof & Gutters', title:'Extend the downspouts', brief:false, hardcap:false,
+      why:"Run the downspout extensions at least 4 feet from the foundation to keep roof water off it. A rain barrel would also help.",
+      timing:'Any dry day', who:'You', diy:'DIY', cost:'$30–70', source:INSPECT },
+    { id:'oil-stains', sev:'good', cat:'Grounds', title:'Degrease the driveway oil stains', brief:false, hardcap:false,
+      why:"Lift the oil spots with a degreaser before winter salt drives them in. Low stakes, easy to slot in. Tracked under your paver project.",
+      timing:'Any dry day', who:'You', diy:'DIY', cost:'~$25', source:null, tag:'Project' },
+    { id:'vent-mesh', sev:'good', cat:'Insulation & Ventilation', title:'Add exterior vent mesh covers', brief:false, hardcap:false,
+      why:"The exterior exhaust vents are missing their protective mesh, an open door for animals. Snap-on covers, ten minutes.",
+      timing:'Any day', who:'You', diy:'DIY', cost:'~$15', source:INSPECT },
+    { id:'dryer-vent', sev:'good', cat:'Insulation & Ventilation', title:'Clean the dryer vent duct', brief:false, hardcap:false,
+      why:"Lint buildup is the boring fire risk and it wastes energy. Clear the full run once a year.",
+      timing:'Yearly', who:'You', diy:'DIY', cost:'~$20', source:INSPECT },
+    { id:'hrv-filter', sev:'good', cat:'Insulation & Ventilation', title:'Clean the HRV filters', brief:false, hardcap:false,
+      why:"Pull and rinse the air exchanger filters every three months so it keeps swapping stale air for fresh. Keeps winter humidity in the 30 to 40% range.",
+      timing:'Every 3 months', who:'You', diy:'DIY', cost:'Free', source:INSPECT },
+    { id:'wh-drain', sev:'good', cat:'Plumbing', title:'Drain the water heater', brief:false, hardcap:false,
+      why:"Draining the tank once a year clears sediment off the base and extends its life. Quick job with a garden hose.",
+      timing:'Yearly', who:'You', diy:'DIY', cost:'Free', source:INSPECT },
+    { id:'roof-snow', sev:'good', cat:'Roof & Gutters', title:'Clear roof snow through winter', brief:false, hardcap:false,
+      why:"Rake heavy snow off the lower roof through winter to limit ice-dam buildup. Matters more until the attic insulation is topped up.",
+      timing:'Winter', who:'You', diy:'DIY', cost:'Free', source:INSPECT },
+
+    { id:'w-ac-coil', sev:'watch', cat:'Heating & Cooling', title:'AC coil frosted twice this summer', watch:true,
+      why:"Logged from this summer. No action now, but I'll surface a proper coil and airflow check first thing next spring so it doesn't repeat.", timing:'Recheck spring', who:'You', diy:'DIY', cost:'—', source:null },
+    { id:'w-furnace-corrosion', sev:'watch', cat:'Heating & Cooling', title:'Furnace corrosion, from inspection', watch:true,
+      why:"Corrosion was noted on the furnace body at inspection. Gazifère serviced the unit but didn't call it out, so watching it for now and worth raising specifically on the next visit.", timing:'Watch', who:'You', diy:'DIY', cost:'—', source:INSPECT },
+    { id:'w-wall-stains', sev:'watch', cat:'Interior', title:'Water stains, upstairs master', watch:true,
+      why:"Stains noted with no moisture on the meter at inspection. Keep an eye out. If they spread, the wall gets opened to find the source.", timing:'Watch', who:'You', diy:'DIY', cost:'—', source:INSPECT },
+    { id:'w-garage-mold', sev:'watch', cat:'Interior', title:'Mold spores on the garage ceiling', watch:true,
+      why:"Likely from poor ventilation there. Clean and disinfect the area, replace drywall if needed, and watch that it stays gone.", timing:'Clean + watch', who:'You', diy:'DIY', cost:'~$20', source:INSPECT },
+    { id:'w-foundation', sev:'watch', cat:'Exterior & Water', title:'Shrinkage crack in the parging', watch:true,
+      why:"Minor surface crack in the foundation plaster, right facade, no moisture behind it. Low risk. Watch it, confirm with an expert if it grows.", timing:'Watch', who:'You', diy:'DIY', cost:'—', source:INSPECT },
+    { id:'w-bath-ceiling', sev:'watch', cat:'Interior', title:'Basement bathroom ceiling cracks', watch:true,
+      why:"Cracking and minor damage on the basement bathroom ceiling. Cosmetic for now. Watch for any change that suggests water above.", timing:'Watch', who:'You', diy:'DIY', cost:'—', source:INSPECT },
+    { id:'w-floor', sev:'watch', cat:'Interior', title:'Damaged floor covering', watch:true,
+      why:"Floor covering damaged with no moisture detected. Keep an eye on it and repair when convenient.", timing:'Watch', who:'You', diy:'DIY', cost:'—', source:INSPECT }
+  ];
+
+  const sevOrder = {critical:0, attention:1, good:2, watch:3};
+  const resolved = new Set();
+  const snoozed = new Set();
+  const added = new Set();
+  const done = new Set();
+  const checked = new Set();
+  const held = new Set();
+  const catOrder = ['Safety','Exterior & Water','Roof & Gutters','Plumbing','Heating & Cooling','Insulation & Ventilation','Interior','Grounds'];
+
+  function srcHTML(t){
+    if(!t.source) return '';
+    return `<div class="source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>${t.source.label}</div>`;
+  }
+
+  function renderBrief(){
+    const items = tasks.filter(t=>t.brief && !snoozed.has(t.id) && !resolved.has(t.id) && !done.has(t.id)).sort((a,b)=>sevOrder[a.sev]-sevOrder[b.sev]);
+    document.getElementById('briefct').textContent = items.length;
+    document.getElementById('brieflist').innerHTML = items.map(cardHTML).join('');
+    renderChecks();
+    const w = tasks.filter(t=>t.watch && !resolved.has(t.id) && !done.has(t.id));
+    document.getElementById('watchlist').innerHTML = w.map(t=>`
+      <div class="watching">
+        <div class="eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <p><b>${t.title}.</b> ${t.why} ${t.source?`<span class="wsrc">${t.source.label}</span>`:''}</p>
+      </div>`).join('');
+    document.getElementById('ontrackct').textContent = 7 + resolved.size + done.size;
+  }
+
+  function cardHTML(t){
+    const diyPill = t.diy==='Hire' ? '<span class="pill hire">Hire it</span>' : '<span class="pill diy">DIY</span>';
+    const tagPill = t.tag ? `<span class="pill cat">${t.tag}</span>` : `<span class="pill cat">${t.cat}</span>`;
+    const lockPill = t.hardcap ? '<span class="pill locked">Season-locked</span>' : '';
+    const isHeld = held.has(t.id);
+    const cardCls = isHeld ? 'card held' : 'card';
+    const duePill = isHeld ? `<span class="pill held">Held · ${t.holdDate}</span>` : `<span class="pill due">${t.timing}</span>`;
+    const rightBtn = isHeld
+      ? `<button class="btn unhold" onclick="unhold('${t.id}')">Un-hold</button>`
+      : `<button class="btn snooze" onclick="trySnooze('${t.id}')">Snooze</button>`;
+    const calBtn = added.has(t.id)
+      ? '<button class="btn cal done">Added &#10003;</button>'
+      : `<button class="btn cal" onclick="addCal('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Add to calendar</button>`;
+    return `<div class="${cardCls}">
+      <button class="donebtn" title="Mark done" onclick="markDone('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
+      <div class="top"><div class="sev ${t.sev}"></div><div style="flex:1">
+        <h3>${t.title}</h3><div class="why">${t.why}</div>${srcHTML(t)}
+      </div></div>
+      <div class="meta">${duePill}${diyPill}<span class="pill cost">${t.cost}</span>${tagPill}${lockPill}<span class="pill who">${t.who}</span></div>
+      <div class="actions">${calBtn}${rightBtn}</div>
+    </div>`;
+  }
+
+  let allFilter = 'all';
+  function setFilter(f, el){ allFilter=f; document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on')); el.classList.add('on'); renderAll(); }
+
+  function renderAll(){
+    let pool = tasks.filter(t=>!resolved.has(t.id) && !done.has(t.id));
+    if(allFilter!=='all') pool = pool.filter(t=>t.sev===allFilter);
+    let html='';
+    catOrder.forEach(cat=>{
+      const items = pool.filter(t=>t.cat===cat).sort((a,b)=>sevOrder[a.sev]-sevOrder[b.sev]);
+      if(!items.length) return;
+      html += `<div class="catgroup"><div class="catlabel">${cat}<span class="n">${items.length}</span></div>`;
+      html += items.map(t=>{
+        const diy = t.diy==='Hire'?'Hire':'DIY';
+        return `<div class="allitem"><div class="sev ${t.sev}"></div><div style="flex:1">
+          <h4>${t.title}</h4><div class="why">${t.why}</div>
+          <div class="rowmeta"><span><b>${t.timing}</b></span><span>${diy}</span><span>${t.cost}</span><span>${t.who}</span>${t.source?`<span>${t.source.label}</span>`:''}</div>
+          <button class="resolvebtn" onclick="resolveTask('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Mark resolved</button>
+        </div></div>`;
+      }).join('');
+      html += `</div>`;
+    });
+    document.getElementById('alllist').innerHTML = html || '<p style="color:var(--ink-faint);font-size:13px;padding:8px 2px;">Nothing in this filter. Everything here is handled.</p>';
+  }
+
+  function resolveTask(id){ const t=tasks.find(x=>x.id===id); resolved.add(id); pushHistory('resolved', t.title, t.who, 'Marked already handled'); renderAll(); renderBrief(); toast('Marked resolved and logged to history.'); }
+  function addCal(id){ added.add(id); renderBrief(); toast('Added to your calendar. Isa can see it too.'); }
+  function markDone(id){ const t=tasks.find(x=>x.id===id); done.add(id); pushHistory('done', t.title, t.who, 'Completed'); renderBrief(); renderAll(); toast('Done, and filed to history.'); }
+
+  let pendingHold=null;
+  function trySnooze(id){
+    const t = tasks.find(x=>x.id===id);
+    if(t.hardcap){
+      pendingHold=t;
+      document.getElementById('modaltitle').textContent = t.cat==='Safety' ? "Safety item, so I keep it visible" : "This one's tied to the season";
+      document.getElementById('modalbody').innerHTML = t.holdText;
+      document.getElementById('holdbtn').textContent = (t.holdDate==='stay'||t.holdDate.startsWith('end')) ? 'Keep it up' : 'Hold until '+t.holdDate;
+      document.getElementById('modal').classList.add('show');
+    } else { snoozed.add(id); renderBrief(); toast('Snoozed. I\'ll bring it back in next week\'s brief.'); }
+  }
+  function holdTask(){
+    if(pendingHold && pendingHold.holdDate!=='stay' && !pendingHold.holdDate.startsWith('end')){
+      held.add(pendingHold.id); closeModal(); renderBrief();
+      toast('Held to its safe date. It stays on the list, just quieter.');
+    } else {
+      closeModal(); toast('Keeping it visible. This one stays put on purpose.');
+    }
+  }
+  function unhold(id){ held.delete(id); renderBrief(); toast('Back on the active list.'); }
+  function closeModal(){ document.getElementById('modal').classList.remove('show'); pendingHold=null; }
+
+  let toastTimer;
+  function toast(msg){ const el=document.getElementById('toast'); document.getElementById('toasttext').textContent=msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),3200); }
+
+  function go(view, btn){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+view).classList.add('active');
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('lede').style.display = view==='brief'?'block':'none';
+    document.querySelector('.scroll').scrollTop=0;
+    if(view==='all') renderAll();
+  }
+
+  function submitFlag(){
+    const box=document.getElementById('flagtext'); const text=box.value.trim();
+    if(!text){ toast('Add a line about what you\'re seeing first.'); return; }
+    const title = text.length>46 ? text.slice(0,44).trim()+'…' : text;
+    tasks.unshift({ id:'flag'+Date.now(), sev:'attention', cat:'Interior', title:title.charAt(0).toUpperCase()+title.slice(1), brief:true, hardcap:false,
+      why:"Flagged by you. Triaged as worth a look soon: slotted into the brief with first steps drafted. Open it to hand off to a full Claude thread.",
+      timing:'Look this week', who:'You', diy:'DIY', cost:'TBD', source:null, tag:'Flagged' });
+    box.value=''; renderBrief();
+    document.querySelector('nav button[data-view="brief"]').click();
+    setTimeout(()=>toast('Triaged and added to your brief. It\'s up top.'),350);
+  }
+
+  // ---- Seasonal preventive checks (the "catch it before it lurks" layer) ----
+  const checks = [
+    { id:'c-rain-grade', title:'After the next heavy rain, walk the basement and side grade', interval:'After each heavy rain',
+      why:"Look for damp corners or water pooling toward the house. Your right and rear sides were flagged for poor slope, so those are the spots to eyeball." },
+    { id:'c-garage-mould', title:'Check the garage ceiling stain and mould spot', interval:'Monthly',
+      why:"Any spread, softness, or fresh spores means it's active, not old. Snap a photo so next month you can compare." },
+    { id:'c-wall-stains', title:'Check the upstairs master wall stains', interval:'Monthly',
+      why:"Confirm they aren't spreading before heating season dries things out and hides changes." },
+    { id:'c-windows', title:'Check window edges and the failed seals for leaks', interval:'Seasonal',
+      why:"Before winter, look for condensation between panes and any water sitting at the sills." },
+    { id:'c-humidity', title:'Check indoor humidity is easing toward 30 to 40%', interval:'Seasonal',
+      why:"As heating starts, high indoor humidity is the number one cause of mould. Your HRV should be pulling it down." }
+  ];
+
+  function renderChecks(){
+    const list = checks.filter(c=>!checked.has(c.id));
+    document.getElementById('checkct').textContent = list.length;
+    document.getElementById('checklist').innerHTML = list.map(c=>`
+      <div class="checkrow">
+        <div class="ct">
+          <div class="ceye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div style="flex:1"><h4>${c.title}</h4><div class="why">${c.why}</div><div class="cint">${c.interval}</div></div>
+        </div>
+        <div class="cbtns">
+          <button class="cbtn clear" onclick="checkClear('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>All clear</button>
+          <button class="cbtn issue" onclick="checkIssue('${c.id}')">Found something</button>
+        </div>
+      </div>`).join('') || '<p style="color:var(--ink-faint);font-size:12.5px;padding:2px;">All checks done for now. Nicely stayed ahead of it.</p>';
+  }
+
+  function checkClear(id){ const c=checks.find(x=>x.id===id); checked.add(id); pushHistory('checked', c.title, 'You', 'Looked, all clear'); renderChecks(); toast('Logged as clear. Next look is scheduled.'); }
+  function checkIssue(id){
+    const c=checks.find(x=>x.id===id); checked.add(id); renderChecks();
+    document.getElementById('flagtext').value = 'Following up on a check: '+c.title.toLowerCase()+' — ';
+    document.querySelector('nav button[data-view="flag"]').click();
+    toast('Send it through with a photo and I\'ll triage it.');
+  }
+
+  // ---- History ----
+  const history = [
+    { kind:'done', title:'Gazifère annual furnace maintenance, unit cleaned and filter changed', who:'Isa', when:'Today' },
+    { kind:'done', title:'Gazifère helped sort out the air circulation', who:'You', when:'Today' },
+    { kind:'checked', title:'Checked the sump and basement after a storm, all clear', who:'You', when:'Last week' },
+    { kind:'resolved', title:'Replaced the dead thermostat, now the Resideo', who:'You', when:'Spring' },
+    { kind:'done', title:'Serviced the AC for the season', who:'You', when:'June' },
+    { kind:'done', title:'Tested smoke and CO detectors', who:'Isa', when:'June' }
+  ];
+  function pushHistory(kind, title, who, note){ history.unshift({kind, title, who:who||'You', when:'Today', note}); renderHistory(); }
+
+  const kindIcon = {
+    done:'<path d="M20 6 9 17l-5-5"/>',
+    resolved:'<path d="M20 6 9 17l-5-5"/>',
+    checked:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+    issue:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>'
+  };
+  const kindLabel = {done:'Completed', resolved:'Resolved', checked:'Checked', issue:'Flagged'};
+
+  function renderHistory(){
+    document.getElementById('histlist').innerHTML = history.map(h=>`
+      <div class="oventry">
+        <div class="oic ${h.kind}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${kindIcon[h.kind]}</svg></div>
+        <div style="flex:1">
+          <h4>${h.title}</h4>
+          <div class="osub"><b>${h.who}</b> · ${kindLabel[h.kind]} · ${h.when}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function openHistory(){ renderHistory(); document.getElementById('overlay').classList.add('show'); }
+  function closeHistory(){ document.getElementById('overlay').classList.remove('show'); }
+
+  renderBrief();
+  renderHistory();
+</script>
+</body>
+</html>
