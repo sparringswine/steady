@@ -624,13 +624,12 @@
   }
   function addCal(id){
     const t=tasks.find(x=>x.id===id);
-    added.add(id); renderBrief();
     const d=calcDate(t);
     const start=calYmd(d), end=calYmd(new Date(d.getTime()+86400000));
-    const text=encodeURIComponent(t.title);
-    const details=encodeURIComponent((t.why||'')+'\n\nAdded from Steady');
-    const url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+text+'&dates='+start+'/'+end+'&details='+details;
-    window.open(url,'_blank');
+    const url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(t.title)+'&dates='+start+'/'+end+'&details='+encodeURIComponent((t.why||'')+'\n\nAdded from Steady');
+    const a=document.createElement('a'); a.href=url; a.target='_blank'; a.rel='noopener';
+    document.body.appendChild(a); a.click(); setTimeout(function(){document.body.removeChild(a);},100);
+    added.add(id); renderBrief();
     toast('Opening Google Calendar. Check the date, then Save.');
   }
   function markDone(id){ const t=tasks.find(x=>x.id===id); done.add(id); pushHistory('done', t.title, t.who, 'Completed'); renderBrief(); renderAll(); toast('Done, and filed to history.'); }
