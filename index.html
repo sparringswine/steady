@@ -612,7 +612,27 @@
   }
 
   function resolveTask(id){ const t=tasks.find(x=>x.id===id); resolved.add(id); pushHistory('resolved', t.title, t.who, 'Marked already handled'); renderAll(); renderBrief(); toast('Marked resolved and logged to history.'); }
-  function addCal(id){ added.add(id); renderBrief(); toast('Added to your calendar. Isa can see it too.'); }
+  function calPad(n){ return String(n).padStart(2,'0'); }
+  function calYmd(d){ return ''+d.getFullYear()+calPad(d.getMonth()+1)+calPad(d.getDate()); }
+  function calcDate(t){
+    const months={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+    const src=(((t.holdDate&&t.holdDate!=='stay')?t.holdDate+' ':'')+(t.timing||'')).toLowerCase();
+    const m=src.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2})/);
+    const now=new Date();
+    if(m){ let dt=new Date(now.getFullYear(),months[m[1]],parseInt(m[2])); if(dt<now){ dt=new Date(now.getFullYear()+1,months[m[1]],parseInt(m[2])); } return dt; }
+    return new Date(now.getTime()+7*86400000);
+  }
+  function addCal(id){
+    const t=tasks.find(x=>x.id===id);
+    added.add(id); renderBrief();
+    const d=calcDate(t);
+    const start=calYmd(d), end=calYmd(new Date(d.getTime()+86400000));
+    const text=encodeURIComponent(t.title);
+    const details=encodeURIComponent((t.why||'')+'\n\nAdded from Steady');
+    const url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+text+'&dates='+start+'/'+end+'&details='+details;
+    window.open(url,'_blank');
+    toast('Opening Google Calendar. Check the date, then Save.');
+  }
   function markDone(id){ const t=tasks.find(x=>x.id===id); done.add(id); pushHistory('done', t.title, t.who, 'Completed'); renderBrief(); renderAll(); toast('Done, and filed to history.'); }
 
   let pendingHold=null;
