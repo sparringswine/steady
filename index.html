@@ -138,6 +138,17 @@
   .stat.next{background:#E4E2F0;color:#4b4370;}
   .stat.prog{background:var(--sage-tint);color:#3c5a45;}
   .stat.any{background:#EDEFE8;color:var(--ink-soft);}
+  .projmeta{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;}
+  .supplier{margin-top:11px;background:var(--sage-tint);border-radius:10px;padding:11px 12px;font-size:12.5px;line-height:1.55;color:#3c5a45;}
+  .supplier b{color:#2f4a3a;} .supplier a{color:#2f4a3a;font-weight:700;text-decoration:underline;}
+  .projplan{margin-top:11px;}
+  .projplan summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--pine);display:flex;align-items:center;gap:6px;padding:6px 0;}
+  .projplan summary::-webkit-details-marker{display:none;}
+  .projplan summary .chev{display:inline-flex;transition:transform .2s;} .projplan summary .chev svg{width:14px;height:14px;}
+  .projplan[open] summary .chev{transform:rotate(90deg);}
+  .projplan ol{margin:4px 0 0 0;padding-left:20px;}
+  .projplan li{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:7px;}
+  .projnote{margin-top:11px;font-size:11.5px;color:var(--ink-faint);line-height:1.55;font-style:italic;}
 
   .marquee{background:linear-gradient(160deg,#33513f,#243c2d);color:#EDF1E9;border-radius:18px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
   .marquee .kick{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#A9C0AC;font-weight:600;}
@@ -173,7 +184,7 @@
   .viewhead{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:22px;letter-spacing:-.02em;margin-bottom:4px;}
   .viewsub{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-bottom:20px;}
 
-  nav{position:absolute;bottom:0;left:0;right:0;background:rgba(251,251,247,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding:9px 4px 16px;}
+  nav{position:fixed;bottom:0;left:50%;width:min(428px,100%);transform:translateX(-50%);background:rgba(251,251,247,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding:9px 4px calc(16px + env(safe-area-inset-bottom,0px));z-index:25;}
   nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:var(--ink-faint);font-family:'Inter',sans-serif;font-size:10px;font-weight:500;transition:color .2s;}
   nav button svg{width:20px;height:20px;} nav button.on{color:var(--pine);}
 
@@ -325,31 +336,48 @@
       </div></div>
 
       <div class="proj"><div class="idx">02</div><div>
-        <h3>Renovate the lawn</h3>
-        <div class="why">Aerate, topdress the bumpy low spots, overseed, hit the weeds. Jumps ahead of the pavers because the Gatineau fall seeding window is open now and closes by mid September.</div>
+        <h3>Lawn topdressing, leveling &amp; drainage</h3>
+        <div class="why">The full fix for the bumpy, weedy lawn, plus the side-yard drainage and the river rock, done as one job. The Gatineau fall window is open now through mid September, so this jumps the queue. Plan on more than one pass.</div>
+        <div class="rolls"><b>Closes 1 inspection item:</b> inadequate slope, water pooling toward the foundation on the right and rear sides.</div>
         <span class="stat now">Do now</span>
+        <div class="projmeta">
+          <span class="pill cat">Lawn &amp; yard care</span>
+          <span class="pill due">Late Aug&ndash;Sept</span>
+          <span class="pill cost">~$130&ndash;175</span>
+        </div>
+        <div class="supplier"><b>Order the mix:</b> Sablière Vanier, <a href="tel:+18196824015">819-682-4015</a>, 1181 Ch. Vanier, Gatineau. Ask for 1 cu yd leveling mix (70/30 sand/topsoil), same-day delivery to Aylmer, and whether they can put the river rock top-up on the same truck.</div>
+        <details class="projplan">
+          <summary><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>The 11-step plan</summary>
+          <ol>
+            <li>Apply iron herbicide to the weeds, wait 1&ndash;2 weeks for die-back. Don't mow for 2&ndash;3 days after applying.</li>
+            <li>Pull or rake dead weeds in the dense patches; leave light coverage to decompose.</li>
+            <li>Core-aerate the whole lawn, since it's bumpy throughout.</li>
+            <li>Call Sablière Vanier and order the leveling mix (details above).</li>
+            <li>Spread the mix at most 1/2" per pass, dragging it into the aeration holes.</li>
+            <li>Overseed right after topdressing.</li>
+            <li>Water it in.</li>
+            <li>Use leftover mix to fix the negative slope beside the house: aim for a 6" drop over the first 10 ft, sloping away from the foundation.</li>
+            <li>Top up the river rock bed along the side, matching the existing rock size, about 1&ndash;2" deep.</li>
+            <li>Clean the rock-to-grass edge: pull encroaching grass and weeds, rake stray rock back into the bed, and cut a crisp 3&ndash;4" edge with a spade or edger.</li>
+            <li>Optional: set permanent edging (plastic or steel) between rock and grass to cut future upkeep.</li>
+          </ol>
+        </details>
+        <div class="projnote">Because the bumpiness is lawn-wide rather than a few spots, plan on several topdressing passes over 1&ndash;2 seasons instead of one big lift.</div>
       </div></div>
 
       <div class="proj"><div class="idx">03</div><div>
-        <h3>Regrade the sides and top up the riverstone</h3>
-        <div class="why">Two of your side beds pool water toward the foundation. Reshape the slope away from the house, then refill the river rock so it sits right. Do them together and you grade once.</div>
-        <div class="rolls"><b>Closes 1 inspection item:</b> inadequate slope, water accumulation risk on the right and rear sides.</div>
+        <h3>Relevel the back pavers</h3>
+        <div class="why">Lift the settled pavers, re-sand the base, reset them true. Before cleaning, so you're not degreasing pavers you're about to pull.</div>
         <span class="stat next">Up next</span>
       </div></div>
 
       <div class="proj"><div class="idx">04</div><div>
-        <h3>Relevel the back pavers</h3>
-        <div class="why">Lift the settled pavers, re-sand the base, reset them true. Before cleaning, so you're not degreasing pavers you're about to pull.</div>
+        <h3>Degrease driveway and paver oil stains</h3>
+        <div class="why">Lift the oil spots before winter salt drives them in. Comes after the paver reset, on a dry stretch before the fall rains.</div>
         <span class="stat next">After 03</span>
       </div></div>
 
       <div class="proj"><div class="idx">05</div><div>
-        <h3>Degrease driveway and paver oil stains</h3>
-        <div class="why">Lift the oil spots before winter salt drives them in. Comes after the paver reset, on a dry stretch before the fall rains.</div>
-        <span class="stat next">After 04</span>
-      </div></div>
-
-      <div class="proj"><div class="idx">06</div><div>
         <h3>Top up the attic insulation</h3>
         <div class="why">Inspection measured about 12 inches, roughly R-37. Blowing it up to 15+ inches for R-50 is a clean DIY weekend, cuts the heating bill, and helps stop the ice dams the report flagged. Rebate potential too, see the Value tab.</div>
         <div class="rolls"><b>Closes 2 inspection items:</b> under-target attic insulation and the leaky attic access hatch.</div>
